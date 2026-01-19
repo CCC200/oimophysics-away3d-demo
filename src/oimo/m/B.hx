@@ -12,16 +12,17 @@ using Lambda;
 /**
  * Build Macro
  */
+@:haxe.warning("-WDeprecated") // for using @:extern but this doesn't seem to be working...
 @:extern
 class B {
 
 #if macro
 
 	// print imports of all classes
-	static inline var PRINT_IMPORTS:Bool = false;
+	static inline var WRITE_IMPORTS:Bool = true;
 	// print exports and externs for JS closure compiler
-	static inline var PRINT_EXPORTS:Bool = false;
-	static inline var PRINT_EXTERNS:Bool = false;
+	static inline var WRITE_EXPORTS:Bool = true;
+	static inline var WRITE_EXTERNS:Bool = true;
 
 	static function log(s:String):Void {
 		//trace(s);
@@ -39,11 +40,12 @@ class B {
 	}
 
 	static function onGenerate(types:Array<Type>):Void {
-		if (!PRINT_IMPORTS && !PRINT_EXPORTS && !PRINT_EXTERNS) return;
+		if (!WRITE_IMPORTS && !WRITE_EXPORTS && !WRITE_EXTERNS) return;
 
 		var externs = [];
 		var exports = [];
 		var imports = [];
+		externs.push("var OIMO;");
 		exports.push("window[\"OIMO\"] = {};");
 		types.iter((t) -> switch (t) {
 		case TInst(t, params):
@@ -78,14 +80,14 @@ class B {
 			}
 		case _:
 		});
-		if (PRINT_IMPORTS) {
-			trace("imports:\n" + imports.join("\n"));
+		if (WRITE_IMPORTS) {
+			sys.io.File.saveContent("js_imports.txt", imports.join("\n"));
 		}
-		if (PRINT_EXPORTS) {
-			trace("exports:\n" + exports.join("\n"));
+		if (WRITE_EXPORTS) {
+			sys.io.File.saveContent("js_exports.txt", exports.join("\n"));
 		}
-		if (PRINT_EXTERNS) {
-			trace("externs:\n" + externs.join("\n"));
+		if (WRITE_EXTERNS) {
+			sys.io.File.saveContent("js_externs.txt", externs.join("\n"));
 		}
 	}
 
@@ -183,7 +185,10 @@ class B {
 							name: name,
 							type: macro:Float,
 							expr: null,
-							isFinal: false
+							meta: null,
+							isFinal: false,
+							isStatic: null,
+							namePos: null
 						};
 					}));
 				}

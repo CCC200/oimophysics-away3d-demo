@@ -44,6 +44,7 @@ import away3d.materials.*;
 import away3d.primitives.*;
 import away3d.utils.*;
 import oimo.dynamics.rigidbody.RigidBodyType;
+import oimo.collision.broadphase.*;
 
 import openfl.display.*;
 import openfl.events.*;
@@ -79,7 +80,7 @@ class Main extends Sprite {
 		var fps = new FPS();
 		stage.addChild(fps);
 		
-		oimo_world = new World(null, new Vec3(0, -9.80665, 0));
+		oimo_world = new World(BroadPhaseType._BVH, new Vec3(0, -9.80665, 0));
 		
 		// first step, must do before anything else !!!
 		OimoUtils.setWorld(oimo_world);
