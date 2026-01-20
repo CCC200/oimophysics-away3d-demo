@@ -5,11 +5,13 @@
 	<app main="Main" file="Demo" path="build" />
 	
 	<window background="0x000000" orientation="landscape" />
-	<window width="1024" height="700" if="desktop" />
+	<window width="1024" height="700" fps="60" if="desktop" />
 	
 	<source path="src" />
 	
+	<haxelib name="openfl" />
 	<haxelib name="away3d" />
+	<haxelib name="oimophysics" />
 	
 	<assets path="assets" />
 	
